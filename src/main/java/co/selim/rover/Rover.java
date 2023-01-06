@@ -8,13 +8,24 @@ public class Rover {
     private int y;
     private Direction direction;
 
+    private enum State {READY, LANDED}
+
+    private State currentState;
+
     public Rover(int x, int y, Direction direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
+        this.currentState = State.READY;
+    }
+
+    public String land() {
+        currentState = State.LANDED;
+        return "Landed at (" + x + ", " + y + ") " + direction;
     }
 
     public String move(List<Instruction> instructions) {
+        if (currentState != State.LANDED) throw new IllegalStateException("Rover hasn't landed yet");
         doMove(instructions);
         return "(" + x + ", " + y + ") " + direction;
     }
